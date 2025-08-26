@@ -11,6 +11,29 @@ class ExpenseTracker extends StatefulWidget {
 }
 
 class _ExpenseTrackerState extends State<ExpenseTracker> {
+  
+List<ExpenseBucket> get buckets {
+  return [
+    ExpenseBucket.forCategory(_registeredExpense, Category.food),
+    ExpenseBucket.forCategory(_registeredExpense, Category.work),
+    ExpenseBucket.forCategory(_registeredExpense, Category.leisure),
+    ExpenseBucket.forCategory(_registeredExpense, Category.travel),
+  ];
+}
+
+
+  double get maxTotalExpense {
+    double maxTotalExpenseAmount = 0;
+
+    for (final bucket in buckets) {
+      if (bucket.totalExpenseAmount > maxTotalExpenseAmount) {
+        maxTotalExpenseAmount = bucket.totalExpenseAmount;
+      }
+    }
+
+    return maxTotalExpenseAmount;
+  }
+
   final List<Expense> _registeredExpense = [
     Expense(
       title: 'Burger',
@@ -77,7 +100,90 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text('Chart'),
+            // Chart container
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              width: double.infinity,
+              height: 200, // Fixed height for the chart
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(8),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                    Theme.of(context).colorScheme.primary.withOpacity(0.0),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
+              child: Column(
+                children: [
+                  // Bars
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.end, 
+                      children: [
+                        for (final bucket
+                            in buckets) 
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                              ), // Space between bars
+                              child: FractionallySizedBox(
+                                heightFactor: bucket.totalExpenseAmount == 0
+                                    ? 0
+                                    : bucket.totalExpenseAmount /
+                                          maxTotalExpense, // Scale bar height 0-1
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary, // Bar color
+                                    shape:
+                                        BoxShape.rectangle, // Rectangular shape
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(
+                                        8,
+                                      ), // Rounded top corners only
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 12), // Space between bars and icons
+                  // Category icons under bars
+                  Row(
+                    children: buckets
+                        .map(
+                          (bucket) => Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                              ), // Space between icons
+                              child: Column(
+                                children: [
+                                  Icon(categoryIcons[bucket.category]),
+                                  Text('${bucket.totalExpenseAmount}'),
+                                ],
+                              ), // Category icon
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+
             SizedBox(height: 20),
             Expanded(
               child: ExpenseList(
