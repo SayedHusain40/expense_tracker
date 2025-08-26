@@ -11,7 +11,7 @@ class ExpenseTracker extends StatefulWidget {
 }
 
 class _ExpenseTrackerState extends State<ExpenseTracker> {
-  final List<Expense> registeredExpense = [
+  final List<Expense> _registeredExpense = [
     Expense(
       title: 'Burger',
       amount: 53.136,
@@ -28,14 +28,14 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
 
   void _addExpense(Expense expense) {
     setState(() {
-      registeredExpense.add(expense);
+      _registeredExpense.add(expense);
     });
   }
 
   void _removeExpense(Expense expense) {
-    final indexExpense = registeredExpense.indexOf(expense);
+    final indexExpense = _registeredExpense.indexOf(expense);
     setState(() {
-      registeredExpense.remove(expense);
+      _registeredExpense.remove(expense);
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -45,7 +45,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
           label: 'Undo',
           onPressed: () {
             setState(() {
-              registeredExpense.insert(indexExpense, expense);
+              _registeredExpense.insert(indexExpense, expense);
             });
           },
         ),
@@ -81,7 +81,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
             SizedBox(height: 20),
             Expanded(
               child: ExpenseList(
-                registeredExpense: registeredExpense,
+                registeredExpense: _registeredExpense,
                 onRemoveExpense: _removeExpense,
               ),
             ),

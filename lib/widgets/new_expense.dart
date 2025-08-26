@@ -34,10 +34,10 @@ class _NewExpenseState extends State<NewExpense> {
   void _submitExpense() {
     // check Validity
 
-    final parsedAmount = double.tryParse(_amountController.text);
+    final enteredAmount = double.tryParse(_amountController.text);
 
     if (_titleController.text.trim().isEmpty ||
-        parsedAmount == null ||
+        enteredAmount == null ||
         _date == null) {
       showDialog(
         context: context,
@@ -65,7 +65,7 @@ class _NewExpenseState extends State<NewExpense> {
     widget.onSaveExpense(
       Expense(
         title: _titleController.text,
-        amount: parsedAmount,
+        amount: enteredAmount,
         date: _date!,
         category: _category,
       ),
@@ -118,7 +118,7 @@ class _NewExpenseState extends State<NewExpense> {
             ],
           ),
 
-          SizedBox(height: 10),
+          SizedBox(height: 20),
           Row(
             children: [
               DropdownButton(
