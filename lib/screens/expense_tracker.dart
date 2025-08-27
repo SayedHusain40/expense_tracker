@@ -13,29 +13,14 @@ class ExpenseTracker extends StatefulWidget {
 class _ExpenseTrackerState extends State<ExpenseTracker> {
   List<BucketExpenses> get buckets {
     return [
-      BucketExpenses.forCategory(_registeredExpense, Category.food),
-      BucketExpenses.forCategory(_registeredExpense, Category.work),
-      BucketExpenses.forCategory(_registeredExpense, Category.leisure),
-      BucketExpenses.forCategory(_registeredExpense, Category.travel),
+      BucketExpenses.forCategory(_registeredExpenses, Category.food),
+      BucketExpenses.forCategory(_registeredExpenses, Category.work),
+      BucketExpenses.forCategory(_registeredExpenses, Category.leisure),
+      BucketExpenses.forCategory(_registeredExpenses, Category.travel),
     ];
   }
 
-  Color _getBarColor(Category category) {
-    switch (category) {
-      case Category.food:
-        return Colors.orange.shade400;
-      case Category.travel:
-        return Colors.blue.shade400;
-      case Category.leisure:
-        return Colors.green.shade400;
-      case Category.work:
-        return Colors.red.shade400;
-      default:
-        return Colors.purple.shade400;
-    }
-  }
-
-  double get maxExpensesAmountForCategories {
+  double get maxCategoryExpense {
     double maxAmount = 0;
 
     for (final bucket in buckets) {
@@ -47,7 +32,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
     return maxAmount;
   }
 
-  final List<Expense> _registeredExpense = [
+  final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Burger',
       amount: 53.136,
@@ -70,14 +55,14 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
 
   void _addExpense(Expense expense) {
     setState(() {
-      _registeredExpense.add(expense);
+      _registeredExpenses.add(expense);
     });
   }
 
   void _removeExpense(Expense expense) {
-    final indexExpense = _registeredExpense.indexOf(expense);
+    final removedExpenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
-      _registeredExpense.remove(expense);
+      _registeredExpenses.remove(expense);
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -87,7 +72,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
           label: 'Undo',
           onPressed: () {
             setState(() {
-              _registeredExpense.insert(indexExpense, expense);
+              _registeredExpenses.insert(removedExpenseIndex, expense);
             });
           },
         ),
@@ -96,7 +81,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
     );
   }
 
-  void _showRegisteredOverlay() {
+  void _openNewExpenseModal() {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -112,7 +97,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
       appBar: AppBar(
         title: Text('Flutter ExpenseTracker '),
         actions: [
-          IconButton(onPressed: _showRegisteredOverlay, icon: Icon(Icons.add)),
+          IconButton(onPressed: _openNewExpenseModal, icon: Icon(Icons.add)),
         ],
       ),
       body: Padding(
@@ -154,10 +139,9 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
                               child: FractionallySizedBox(
                                 heightFactor:
                                     bucket.totalExpensesAmountForCategory /
-                                    maxExpensesAmountForCategories,
+                                    maxCategoryExpense,
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
-                                    color: _getBarColor(bucket.category),
                                     shape: BoxShape.rectangle,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -189,7 +173,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
             SizedBox(height: 20),
             Expanded(
               child: ExpenseList(
-                registeredExpense: _registeredExpense,
+                registeredExpense: _registeredExpenses,
                 onRemoveExpense: _removeExpense,
               ),
             ),
