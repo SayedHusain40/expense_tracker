@@ -12,7 +12,6 @@ class BarChart extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: FractionallySizedBox(
           heightFactor: fill,
-
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Colors.purple.shade300,
