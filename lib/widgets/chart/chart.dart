@@ -31,8 +31,8 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(8),
       height: 200,
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -63,7 +63,7 @@ class Chart extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // Icons
           Row(
             children: buckets.map((bucket) {

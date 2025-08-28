@@ -15,15 +15,15 @@ class ExpenseItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(expense.title),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Text(expense.amount.toStringAsFixed(2).toString()),
-                Spacer(),
+                const Spacer(),
                 Row(
                   children: [
                     Icon(categoryIcons[expense.category]),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
 
                     Text(expense.dateFormat),
                   ],

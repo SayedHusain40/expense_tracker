@@ -12,8 +12,6 @@ class ExpenseTracker extends StatefulWidget {
 }
 
 class _ExpenseTrackerState extends State<ExpenseTracker> {
-
-
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Burger',
@@ -26,6 +24,30 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
       amount: 100,
       date: DateTime.now(),
       category: Category.travel,
+    ),
+    Expense(
+      title: 'Cinema',
+      amount: 100,
+      date: DateTime.now(),
+      category: Category.leisure,
+    ),
+    Expense(
+      title: 'Cinema',
+      amount: 100,
+      date: DateTime.now(),
+      category: Category.leisure,
+    ),
+    Expense(
+      title: 'Cinema',
+      amount: 100,
+      date: DateTime.now(),
+      category: Category.leisure,
+    ),
+    Expense(
+      title: 'Cinema',
+      amount: 100,
+      date: DateTime.now(),
+      category: Category.leisure,
     ),
     Expense(
       title: 'Cinema',
@@ -49,7 +71,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: Duration(seconds: 5),
+        duration: const Duration(seconds: 5),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
@@ -58,7 +80,7 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
             });
           },
         ),
-        content: Text('Expense Deleted! '),
+        content: const Text('Expense Deleted! '),
       ),
     );
   }
@@ -67,38 +89,64 @@ class _ExpenseTrackerState extends State<ExpenseTracker> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
+      useSafeArea: true,
+      // barrierColor: Colors.amber,
+      constraints: const BoxConstraints(
+        maxWidth: double.infinity,
+        minHeight: double.infinity,
+      ),
       builder: (ctx) {
-        return NewExpense(onSaveExpense: _addExpense);
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+          ),
+          child: NewExpense(onAddExpense: _addExpense),
+        );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    Widget mainContent = const Center(
+      child: Text('No Expense found. Start adding some!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpenseList(
+        registeredExpense: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter ExpenseTracker '),
+        title: const Text('Flutter ExpenseTracker '),
         actions: [
-          IconButton(onPressed: _openNewExpenseModal, icon: Icon(Icons.add)),
+          IconButton(
+            onPressed: _openNewExpenseModal,
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-
-            Chart(_registeredExpenses),            
-
-            SizedBox(height: 20),
-            Expanded(
-              child: ExpenseList(
-                registeredExpense: _registeredExpenses,
-                onRemoveExpense: _removeExpense,
+        child: width < 600
+            ? Column(
+                children: [
+                  Chart(_registeredExpenses),
+                  Expanded(child: mainContent),
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: Chart(_registeredExpenses)),
+                  Expanded(child: mainContent),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
