@@ -1,16 +1,25 @@
-# expense_tracker
+# Flutter Expense Tracker 💰
 
-A new Flutter project.
+A responsive and adaptive Flutter application to track personal expenses.  
+Users can **add, view, and delete expenses** and see **charts** summarising spending.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- Add, edit, and delete expenses
+- Responsive layout for **portrait and landscape**
+- Adaptive UI for **iOS and Android**
+- Visual charts for expenses
+  
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Screenshots
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p float="left">
+  <img src="assets/screenshots/home.png" width="200"/>
+  <img src="assets/screenshots/add_expense.png" width="200"/>
+  <img src="assets/screenshots/home_responsive.png" width="200"/>
+</p>
+
+---
